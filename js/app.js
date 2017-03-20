@@ -5,25 +5,34 @@ var util = require("./util");
 util.setupInteraction();
 
 class Square extends React.Component {
-  constructor () {
-    super();
-    this.state = {
-      value: null
-    };
-  }
   render() {
     return (
-      <button className="square" onClick={() => this.setState({value: "X"})}>
-        {this.state.value}
+      <button className="square" onClick={() => this.props.onClick()}>
+        {this.props.value}
       </button>
     );
   }
 }
 
 class Board extends React.Component {
-  renderSquare(i) {
-    return <Square value={i} />;
+  constructor () {
+    super();
+    this.state = {
+      squares: Array(9).fill(null)
+    };
   }
+
+  handleClick(clickedSquareIndex) {
+    let squaresCopy = this.state.squares.slice();
+    squaresCopy[clickedSquareIndex] = "X";
+    this.setState({squares: squaresCopy});
+  }
+
+  renderSquare(i) {
+    return <Square value={ this.state.squares[i] }
+                   onClick={ () => this.handleClick(i) }/>;
+  }
+
   render() {
     const status = "Next player: X";
     return (
