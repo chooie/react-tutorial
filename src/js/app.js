@@ -23,7 +23,7 @@ class Board extends React.Component {
   }
 
   handleClick(clickedSquareIndex) {
-    let squaresCopy = this.state.squares.slice();
+    const squaresCopy = this.state.squares.slice();
     squaresCopy[clickedSquareIndex] = "X";
     this.setState({squares: squaresCopy});
   }
