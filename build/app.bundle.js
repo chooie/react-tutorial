@@ -21791,13 +21791,26 @@ var Square = function (_React$Component) {
   function Square() {
     _classCallCheck(this, Square);
 
-    return _possibleConstructorReturn(this, (Square.__proto__ || Object.getPrototypeOf(Square)).apply(this, arguments));
+    var _this = _possibleConstructorReturn(this, (Square.__proto__ || Object.getPrototypeOf(Square)).call(this));
+
+    _this.state = {
+      value: null
+    };
+    return _this;
   }
 
   _createClass(Square, [{
     key: "render",
     value: function render() {
-      return React.createElement("button", { className: "square" });
+      var _this2 = this;
+
+      return React.createElement(
+        "button",
+        { className: "square", onClick: function onClick() {
+            return _this2.setState({ value: "X" });
+          } },
+        this.state.value
+      );
     }
   }]);
 
@@ -21816,12 +21829,12 @@ var Board = function (_React$Component2) {
   _createClass(Board, [{
     key: "renderSquare",
     value: function renderSquare(i) {
-      return React.createElement(Square, null);
+      return React.createElement(Square, { value: i });
     }
   }, {
     key: "render",
     value: function render() {
-      var status = 'Next player: X';
+      var status = "Next player: X";
       return React.createElement(
         "div",
         null,
@@ -21893,7 +21906,7 @@ var Game = function (_React$Component3) {
 
 // ========================================
 
-ReactDOM.render(React.createElement(Game, null), document.getElementById('container'));
+ReactDOM.render(React.createElement(Game, null), document.getElementById("container"));
 
 function calculateWinner(squares) {
   var lines = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]];
