@@ -27,7 +27,7 @@ class Board extends React.Component {
     if (calculateWinner(squaresCopy) || squaresCopy[clickedSquareIndex]) {
       return;
     }
-    squaresCopy[clickedSquareIndex] = this.state.xIsNext ? "X" : "O";
+    squaresCopy[clickedSquareIndex] = this.getNextPlayerSymbol(this.state.xIsNext);
     this.setState({
       squares: squaresCopy,
       xIsNext: !this.state.xIsNext
@@ -40,7 +40,13 @@ class Board extends React.Component {
   }
 
   render() {
-    const status = "Next player: " + (this.state.xIsNext ? "X" : "O");
+    const winner = calculateWinner(this.state.squares);
+    let status;
+    if (winner) {
+      status = "Winner: " + winner;
+    } else {
+      status = "Next player: " + this.getNextPlayerSymbol(this.state.xIsNext);
+    }
     return (
       <div>
         <div className="status">{status}</div>
@@ -61,6 +67,10 @@ class Board extends React.Component {
         </div>
       </div>
     );
+  }
+
+  getNextPlayerSymbol(xIsNext) {
+    return xIsNext ? "X" : "O";
   }
 }
 
