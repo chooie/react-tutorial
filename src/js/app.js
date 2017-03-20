@@ -6,10 +6,10 @@ util.setupInteraction();
 
 function Square(props) {
   return (
-      <button className="square" onClick={() => props.onClick()}>
-        {props.value}
-      </button>
-    );
+    <button className="square" onClick={() => props.onClick()}>
+      {props.value}
+    </button>
+  );
 }
 
 class Board extends React.Component {
@@ -23,6 +23,10 @@ class Board extends React.Component {
 
   handleClick(clickedSquareIndex) {
     const squaresCopy = this.state.squares.slice();
+
+    if (calculateWinner(squaresCopy) || squaresCopy[clickedSquareIndex]) {
+      return;
+    }
     squaresCopy[clickedSquareIndex] = this.state.xIsNext ? "X" : "O";
     this.setState({
       squares: squaresCopy,
