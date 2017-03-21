@@ -41,6 +41,15 @@ class Board extends React.Component {
   }
 }
 
+function GameInfo(props) {
+  return (
+    <div className="game-info">
+      <div>{ props.status }</div>
+      <ol>{ props.moves }</ol>
+    </div>
+  );
+}
+
 class Game extends React.Component {
   constructor() {
     super();
@@ -102,10 +111,10 @@ class Game extends React.Component {
                       this.handleClick(currentSquareIndex) }
           />
         </div>
-        <div className="game-info">
-          <div>{ status }</div>
-          <ol>{ moves }</ol>
-        </div>
+        <GameInfo
+          status={ status }
+          moves={ moves }
+        />
       </div>
     );
   }
