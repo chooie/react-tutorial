@@ -1,7 +1,10 @@
 import React from "react";
 
-import Board from "./Board";
-import GameInfo from "./GameInfo";
+import Board from "./components/Board";
+import GameInfo from "./components/GameInfo";
+
+import * as logic from "./logic";
+import * as message from "./message";
 
 export default class TicTacToeThreeByThree extends React.Component {
   constructor() {
@@ -20,12 +23,14 @@ export default class TicTacToeThreeByThree extends React.Component {
     const current = history[this.state.stepNumber];
     const squaresCopy = current.squares.slice();
 
-    if (thereIsAWinner(squaresCopy) ||
-        theSquareIsFilled(squaresCopy, clickedSquareIndex)) {
+    if (logic.thereIsAWinner(squaresCopy) ||
+        logic.theSquareIsFilled(squaresCopy, clickedSquareIndex)) {
       return;
     }
 
-    squaresCopy[clickedSquareIndex] = getNextPlayerSymbol(this.state.xIsNext);
+    squaresCopy[clickedSquareIndex] =
+      logic.getNextPlayerSymbol(this.state.xIsNext);
+
     this.setState({
       history: history.concat([{
         squares: squaresCopy
@@ -38,11 +43,11 @@ export default class TicTacToeThreeByThree extends React.Component {
   render() {
     const history = this.state.history;
     const current = history[this.state.stepNumber];
-    const winner = calculateWinner(current.squares);
+    const winner = logic.calculateWinner(current.squares);
 
     let status =
-        getStatusBasedOnWhetherThereIsAWinner(
-          winner, getNextPlayerSymbol(this.state.xIsNext)
+        message.getStatusBasedOnWhetherThereIsAWinner(
+          winner, logic.getNextPlayerSymbol(this.state.xIsNext)
         );
 
     const moves = getMoveHistoryElements(history, this.jumpTo.bind(this));
@@ -65,47 +70,9 @@ export default class TicTacToeThreeByThree extends React.Component {
   jumpTo(step) {
     this.setState({
       stepNumber: step,
-      xIsNext: xIsNextIfStepIsOdd(step)
+      xIsNext: logic.xIsNextIfStepIsOdd(step)
     });
   }
-}
-
-function thereIsAWinner(squares) {
-  return calculateWinner(squares);
-}
-
-function calculateWinner(squares) {
-  const lines = [
-    [0, 1, 2],
-    [3, 4, 5],
-    [6, 7, 8],
-    [0, 3, 6],
-    [1, 4, 7],
-    [2, 5, 8],
-    [0, 4, 8],
-    [2, 4, 6],
-  ];
-  for (let i = 0; i < lines.length; i++) {
-    const [a, b, c] = lines[i];
-    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-      return squares[a];
-    }
-  }
-  return null;
-}
-
-function theSquareIsFilled(squares, clickedSquareIndex) {
-  return squares[clickedSquareIndex];
-}
-
-
-function getStatusBasedOnWhetherThereIsAWinner(winner, nextPlayer) {
-  if (winner) {
-    status = "Winner: " + winner;
-  } else {
-    status = "Next player: " + nextPlayer;
-  }
-  return status;
 }
 
 function getMoveHistoryElements(history, onClickToCall) {
@@ -119,12 +86,4 @@ function getMoveHistoryElements(history, onClickToCall) {
       </li>
     );
   });
-}
-
-function getNextPlayerSymbol(xIsNext) {
-  return xIsNext ? "X" : "O";
-}
-
-function xIsNextIfStepIsOdd(step) {
-  return (step % 2) ? false: true
 }

@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import * as util from "./util";
 
-import TicTacToeThreeByThree from "./components/TicTacToeThreeByThree";
+import TicTacToeThreeByThree from "./components/TicTacToeThreeByThree/core";
 
 util.setupInteraction();
 
