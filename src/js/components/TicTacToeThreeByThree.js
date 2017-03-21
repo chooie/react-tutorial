@@ -1,4 +1,5 @@
 import React from "react";
+
 import Board from "./Board";
 import GameInfo from "./GameInfo";
 
@@ -38,12 +39,10 @@ export default class TicTacToeThreeByThree extends React.Component {
     const current = history[this.state.stepNumber];
     const winner = calculateWinner(current.squares);
 
-    let status;
-    if (winner) {
-      status = "Winner: " + winner;
-    } else {
-      status = "Next player: " + getNextPlayerSymbol(this.state.xIsNext);
-    }
+    let status =
+        getStatusBasedOnWhetherThereIsAWinner(
+          winner, getNextPlayerSymbol(this.state.xIsNext)
+        );
 
     const moves = history.map((step, move) => {
       const description = move ? "Move #" + move : "Game start";
@@ -77,6 +76,15 @@ export default class TicTacToeThreeByThree extends React.Component {
       xIsNext: xIsNextIfStepIsOdd(step)
     });
   }
+}
+
+function getStatusBasedOnWhetherThereIsAWinner(winner, nextPlayer) {
+  if (winner) {
+    status = "Winner: " + winner;
+  } else {
+    status = "Next player: " + nextPlayer;
+  }
+  return status;
 }
 
 function getNextPlayerSymbol(xIsNext) {
