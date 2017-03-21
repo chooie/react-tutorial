@@ -15,7 +15,7 @@ function GameInfo(props) {
   );
 }
 
-class Game extends React.Component {
+class TicTacToeThreeByThree extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -103,7 +103,7 @@ class Game extends React.Component {
 // ========================================
 
 ReactDOM.render(
-  <Game />,
+  <TicTacToeThreeByThree />,
   document.getElementById("container")
 );
 
