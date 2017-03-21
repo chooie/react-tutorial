@@ -44,14 +44,7 @@ export default class TicTacToeThreeByThree extends React.Component {
           winner, getNextPlayerSymbol(this.state.xIsNext)
         );
 
-    const moves = history.map((step, move) => {
-      const description = move ? "Move #" + move : "Game start";
-      return (
-        <li key={ move }>
-          <a href="#" onClick={ () => this.jumpTo(move) }>{ description }</a>
-        </li>
-      );
-    });
+    const moves = getMoveHistoryElements(history, this.jumpTo.bind(this));
 
     return (
       <div className="game">
@@ -85,6 +78,19 @@ function getStatusBasedOnWhetherThereIsAWinner(winner, nextPlayer) {
     status = "Next player: " + nextPlayer;
   }
   return status;
+}
+
+function getMoveHistoryElements(history, onClickToCall) {
+  return history.map((step, move) => {
+    const description = move ? "Move #" + move : "Game start";
+    return (
+      <li key={ move }>
+        <a href="#" onClick={ () => onClickToCall(move) }>
+          { description }
+        </a>
+      </li>
+    );
+  });
 }
 
 function getNextPlayerSymbol(xIsNext) {
