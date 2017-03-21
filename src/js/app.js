@@ -48,13 +48,14 @@ class Game extends React.Component {
       history: [{
         squares: Array(9).fill(null)
       }],
+      stepNumber: 0,
       xIsNext: true
     };
   }
 
   handleClick(clickedSquareIndex) {
-    const history = this.state.history;
-    const current = history[history.length - 1];
+    const history = this.state.history.slice(0, this.state.stepNumber + 1);
+    const current = history[this.state.stepNumber];
     const squaresCopy = current.squares.slice();
 
     if (calculateWinner(squaresCopy) || squaresCopy[clickedSquareIndex]) {
@@ -66,13 +67,14 @@ class Game extends React.Component {
       history: history.concat([{
         squares: squaresCopy
       }]),
+      stepNumber: this.state.stepNumber + 1,
       xIsNext: !this.state.xIsNext
     });
   }
 
   render() {
     const history = this.state.history;
-    const current = history[history.length - 1];
+    const current = history[this.state.stepNumber];
     const winner = calculateWinner(current.squares);
 
     let status;
@@ -81,6 +83,15 @@ class Game extends React.Component {
     } else {
       status = "Next player: " + this.getNextPlayerSymbol(this.state.xIsNext);
     }
+
+    const moves = history.map((step, move) => {
+      const description = move ? "Move #" + move : "Game start";
+      return (
+        <li key={ move }>
+          <a href="#" onClick={ () => this.jumpTo(move) }>{ description }</a>
+        </li>
+      );
+    });
 
     return (
       <div className="game">
@@ -93,7 +104,7 @@ class Game extends React.Component {
         </div>
         <div className="game-info">
           <div>{ status }</div>
-          <ol>{/* TODO */}</ol>
+          <ol>{ moves }</ol>
         </div>
       </div>
     );
@@ -101,6 +112,17 @@ class Game extends React.Component {
 
   getNextPlayerSymbol(xIsNext) {
     return xIsNext ? "X" : "O";
+  }
+
+  jumpTo(step) {
+    this.setState({
+      stepNumber: step,
+      xIsNext: this.xIsNextIfStepIsOdd(step)
+    });
+  }
+
+  xIsNextIfStepIsOdd(step) {
+    return (step % 2) ? false: true
   }
 }
 
