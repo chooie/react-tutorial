@@ -3,17 +3,9 @@ import ReactDOM from "react-dom";
 import * as util from "./util";
 
 import Board from "./Board";
+import GameInfo from "./GameInfo";
 
 util.setupInteraction();
-
-function GameInfo(props) {
-  return (
-    <div className="game-info">
-      <div>{ props.status }</div>
-      <ol>{ props.moves }</ol>
-    </div>
-  );
-}
 
 class TicTacToeThreeByThree extends React.Component {
   constructor() {
