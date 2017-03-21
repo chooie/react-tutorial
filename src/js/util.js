@@ -15,13 +15,16 @@ export function setupInteraction() {
     }
   });
   window.onerror = function(message, source, line, col, error) {
-    var text = error ? error.stack || error : message + ' (at ' + source + ':' + line + ':' + col + ')';
+    var text = error ?
+        error.stack || error :
+        message + ' (at ' + source + ':' + line + ':' + col + ')';
     errors.textContent += text + '\n';
     errors.style.display = '';
   };
   console.error = (function(old) {
     return function error() {
-      errors.textContent += Array.prototype.slice.call(arguments).join(' ') + '\n';
+      errors.textContent +=
+        Array.prototype.slice.call(arguments).join(' ') + '\n';
       errors.style.display = '';
       old.apply(this, arguments);
     }
