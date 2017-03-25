@@ -81,9 +81,13 @@ export default class TicTacToeThreeByThree extends React.Component {
 function getMoveHistoryElements(stepNumber, history, onClickToCall) {
   return history.map((step, move) => {
     const description = move ? "Move #" + move : "Game start";
+    const isCurrentMove = stepNumber === move;
+    const activeClassIfCurrentMove = isCurrentMove ? "active" : "";
     return (
       <li key={ move }>
-        <a href="#" onClick={ () => onClickToCall(move) }>
+        <a href="#"
+           onClick={ () => onClickToCall(move) }
+           className={ activeClassIfCurrentMove }>
           { description }
         </a>
       </li>

@@ -9595,14 +9595,18 @@ exports.default = TicTacToeThreeByThree;
 function getMoveHistoryElements(stepNumber, history, onClickToCall) {
   return history.map(function (step, move) {
     var description = move ? "Move #" + move : "Game start";
+    var isCurrentMove = stepNumber === move;
+    var activeClassIfCurrentMove = isCurrentMove ? "active" : "";
     return _react2.default.createElement(
       "li",
       { key: move },
       _react2.default.createElement(
         "a",
-        { href: "#", onClick: function onClick() {
+        { href: "#",
+          onClick: function onClick() {
             return onClickToCall(move);
-          } },
+          },
+          className: activeClassIfCurrentMove },
         description
       )
     );
