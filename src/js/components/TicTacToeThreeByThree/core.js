@@ -42,20 +42,23 @@ export default class TicTacToeThreeByThree extends React.Component {
 
   render() {
     const history = this.state.history;
-    const current = history[this.state.stepNumber];
-    const winner = logic.calculateWinner(current.squares);
+    const stepNumber = this.state.stepNumber;
+    const currentBoard = history[stepNumber];
+    const winner = logic.calculateWinner(currentBoard.squares);
 
     let status =
         message.getStatusBasedOnWhetherThereIsAWinner(
           winner, logic.getNextPlayerSymbol(this.state.xIsNext)
         );
 
-    const moves = getMoveHistoryElements(history, this.jumpTo.bind(this));
+    const moves = getMoveHistoryElements(stepNumber,
+                                         history,
+                                         this.jumpTo.bind(this));
 
     return (
       <div className="game">
         <Board
-            squares={ current.squares }
+            squares={ currentBoard.squares }
             onClick={ (currentSquareIndex) =>
                       this.handleClick(currentSquareIndex) }
           />
@@ -75,7 +78,7 @@ export default class TicTacToeThreeByThree extends React.Component {
   }
 }
 
-function getMoveHistoryElements(history, onClickToCall) {
+function getMoveHistoryElements(stepNumber, history, onClickToCall) {
   return history.map((step, move) => {
     const description = move ? "Move #" + move : "Game start";
     return (

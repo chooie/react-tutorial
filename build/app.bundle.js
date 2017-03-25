@@ -9553,18 +9553,19 @@ var TicTacToeThreeByThree = function (_React$Component) {
       var _this2 = this;
 
       var history = this.state.history;
-      var current = history[this.state.stepNumber];
-      var winner = logic.calculateWinner(current.squares);
+      var stepNumber = this.state.stepNumber;
+      var currentBoard = history[stepNumber];
+      var winner = logic.calculateWinner(currentBoard.squares);
 
       var status = message.getStatusBasedOnWhetherThereIsAWinner(winner, logic.getNextPlayerSymbol(this.state.xIsNext));
 
-      var moves = getMoveHistoryElements(history, this.jumpTo.bind(this));
+      var moves = getMoveHistoryElements(stepNumber, history, this.jumpTo.bind(this));
 
       return _react2.default.createElement(
         "div",
         { className: "game" },
         _react2.default.createElement(_Board2.default, {
-          squares: current.squares,
+          squares: currentBoard.squares,
           onClick: function onClick(currentSquareIndex) {
             return _this2.handleClick(currentSquareIndex);
           }
@@ -9591,7 +9592,7 @@ var TicTacToeThreeByThree = function (_React$Component) {
 exports.default = TicTacToeThreeByThree;
 
 
-function getMoveHistoryElements(history, onClickToCall) {
+function getMoveHistoryElements(stepNumber, history, onClickToCall) {
   return history.map(function (step, move) {
     var description = move ? "Move #" + move : "Game start";
     return _react2.default.createElement(
