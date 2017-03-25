@@ -9,11 +9,12 @@ export default class Board extends React.Component {
   render() {
     return (
       <div className="game-board">
-        <div className="board-row">
-          {this.renderSquare(0)}
-          {this.renderSquare(1)}
-          {this.renderSquare(2)}
-        </div>
+        <BoardRow
+          rowNumber={ 0 }
+          numberOfColumns={ 3 }
+          squares={ this.props.squares }
+          onClick={ this.props.onClick }
+        />
         <div className="board-row">
           {this.renderSquare(3)}
           {this.renderSquare(4)}
@@ -27,6 +28,32 @@ export default class Board extends React.Component {
       </div>
     );
   }
+}
+
+function BoardRow(props) {
+  let rowNumber = props.rowNumber;
+  let numberOfColumns = props.numberOfColumns;
+  let squares = props.squares;
+  let onClick = props.onClick;
+  var columns = [];
+  for (let columnIndex = 0;
+       columnIndex < numberOfColumns;
+       columnIndex += 1) {
+    let absoluteIndex = (rowNumber * numberOfColumns) + columnIndex;
+    let square = (
+      <Square
+        key={ absoluteIndex }
+        value={ squares[absoluteIndex] }
+        onClick={ () => onClick(absoluteIndex) }
+      />
+    );
+    columns.push(square);
+  }
+  return (
+    <div key={rowNumber} className="board-row">
+      { columns }
+    </div>
+  );
 }
 
 function Square(props) {

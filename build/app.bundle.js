@@ -21958,13 +21958,12 @@ var Board = function (_React$Component) {
       return _react2.default.createElement(
         "div",
         { className: "game-board" },
-        _react2.default.createElement(
-          "div",
-          { className: "board-row" },
-          this.renderSquare(0),
-          this.renderSquare(1),
-          this.renderSquare(2)
-        ),
+        _react2.default.createElement(BoardRow, {
+          rowNumber: 0,
+          numberOfColumns: 3,
+          squares: this.props.squares,
+          onClick: this.props.onClick
+        }),
         _react2.default.createElement(
           "div",
           { className: "board-row" },
@@ -21988,6 +21987,35 @@ var Board = function (_React$Component) {
 
 exports.default = Board;
 
+
+function BoardRow(props) {
+  var rowNumber = props.rowNumber;
+  var numberOfColumns = props.numberOfColumns;
+  var squares = props.squares;
+  var _onClick = props.onClick;
+  var columns = [];
+
+  var _loop = function _loop(columnIndex) {
+    var absoluteIndex = rowNumber * numberOfColumns + columnIndex;
+    var square = _react2.default.createElement(Square, {
+      key: absoluteIndex,
+      value: squares[absoluteIndex],
+      onClick: function onClick() {
+        return _onClick(absoluteIndex);
+      }
+    });
+    columns.push(square);
+  };
+
+  for (var columnIndex = 0; columnIndex < numberOfColumns; columnIndex += 1) {
+    _loop(columnIndex);
+  }
+  return _react2.default.createElement(
+    "div",
+    { key: rowNumber, className: "board-row" },
+    columns
+  );
+}
 
 function Square(props) {
   return _react2.default.createElement(
