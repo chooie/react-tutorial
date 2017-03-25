@@ -21943,41 +21943,26 @@ var Board = function (_React$Component) {
   }
 
   _createClass(Board, [{
-    key: "renderSquare",
-    value: function renderSquare(i) {
-      var _this2 = this;
-
-      return _react2.default.createElement(Square, { value: this.props.squares[i],
-        onClick: function onClick() {
-          return _this2.props.onClick(i);
-        } });
-    }
-  }, {
     key: "render",
     value: function render() {
+      var rows = [];
+      var numberOfRows = 3;
+      var numberOfColumns = 3;
+      var squares = this.props.squares;
+      var onClick = this.props.onClick;
+      for (var rowIndex = 0; rowIndex < numberOfRows; rowIndex += 1) {
+        rows.push(_react2.default.createElement(BoardRow, {
+          key: rowIndex,
+          rowNumber: rowIndex,
+          numberOfColumns: numberOfColumns,
+          squares: squares,
+          onClick: onClick
+        }));
+      }
       return _react2.default.createElement(
         "div",
         { className: "game-board" },
-        _react2.default.createElement(BoardRow, {
-          rowNumber: 0,
-          numberOfColumns: 3,
-          squares: this.props.squares,
-          onClick: this.props.onClick
-        }),
-        _react2.default.createElement(
-          "div",
-          { className: "board-row" },
-          this.renderSquare(3),
-          this.renderSquare(4),
-          this.renderSquare(5)
-        ),
-        _react2.default.createElement(
-          "div",
-          { className: "board-row" },
-          this.renderSquare(6),
-          this.renderSquare(7),
-          this.renderSquare(8)
-        )
+        rows
       );
     }
   }]);
