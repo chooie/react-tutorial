@@ -1,8 +1,8 @@
-export function getStatusBasedOnWhetherThereIsAWinner(winner, nextPlayer) {
+export function getStatusBasedOnWhetherThereIsAWinner(winnerResults, nextPlayer) {
   var status;
 
-  if (winner) {
-    status = "Winner: " + winner;
+  if (winnerResults) {
+    status = "Winner: " + winnerResults.winner;
   } else {
     status = "Next player: " + nextPlayer;
   }

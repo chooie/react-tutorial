@@ -44,11 +44,11 @@ export default class TicTacToeThreeByThree extends React.Component {
     const history = this.state.history;
     const stepNumber = this.state.stepNumber;
     const currentBoard = history[stepNumber];
-    const winner = logic.calculateWinner(currentBoard.squares);
+    const winnerResults = logic.calculateWinner(currentBoard.squares);
 
     let status =
         message.getStatusBasedOnWhetherThereIsAWinner(
-          winner, logic.getNextPlayerSymbol(this.state.xIsNext)
+          winnerResults, logic.getNextPlayerSymbol(this.state.xIsNext)
         );
 
     const moves = getMoveHistoryElements(stepNumber,

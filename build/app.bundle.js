@@ -9555,9 +9555,9 @@ var TicTacToeThreeByThree = function (_React$Component) {
       var history = this.state.history;
       var stepNumber = this.state.stepNumber;
       var currentBoard = history[stepNumber];
-      var winner = logic.calculateWinner(currentBoard.squares);
+      var winnerResults = logic.calculateWinner(currentBoard.squares);
 
-      var status = message.getStatusBasedOnWhetherThereIsAWinner(winner, logic.getNextPlayerSymbol(this.state.xIsNext));
+      var status = message.getStatusBasedOnWhetherThereIsAWinner(winnerResults, logic.getNextPlayerSymbol(this.state.xIsNext));
 
       var moves = getMoveHistoryElements(stepNumber, history, this.jumpTo.bind(this));
 
@@ -22089,7 +22089,10 @@ function calculateWinner(squares) {
         c = _lines$i[2];
 
     if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-      return squares[a];
+      return {
+        winner: squares[a],
+        winningPositions: [a, b, c]
+      };
     }
   }
   return null;
@@ -22118,11 +22121,11 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.getStatusBasedOnWhetherThereIsAWinner = getStatusBasedOnWhetherThereIsAWinner;
-function getStatusBasedOnWhetherThereIsAWinner(winner, nextPlayer) {
+function getStatusBasedOnWhetherThereIsAWinner(winnerResults, nextPlayer) {
   var status;
 
-  if (winner) {
-    status = "Winner: " + winner;
+  if (winnerResults) {
+    status = "Winner: " + winnerResults.winner;
   } else {
     status = "Next player: " + nextPlayer;
   }
