@@ -7,6 +7,7 @@ export default class Board extends React.Component {
     const squares = this.props.squares;
     const onClick = this.props.onClick;
     const winnerResults = this.props.winnerResults;
+    const stepNumber = this.props.stepNumber;
     let rows = [];
     for (var rowIndex = 0; rowIndex < numberOfRows; rowIndex += 1) {
       rows.push(
@@ -17,6 +18,7 @@ export default class Board extends React.Component {
           squares={ squares }
           onClick={ onClick }
           winnerResults={ winnerResults }
+          stepNumber={ stepNumber }
         />
       );
     }
@@ -34,8 +36,9 @@ function BoardRow(props) {
   const squares = props.squares;
   const onClick = props.onClick;
   const winnerResults = props.winnerResults;
+  const stepNumber = props.stepNumber;
   let columns = makeColumnsForRow(rowNumber, numberOfColumns, squares, onClick,
-                                  winnerResults);
+                                  winnerResults, stepNumber);
   return (
     <div key={rowNumber} className="board-row">
       { columns }
@@ -43,14 +46,15 @@ function BoardRow(props) {
   );
 
   function makeColumnsForRow(rowNumber, numberOfColumns, squares, onClick,
-                             winnerResults) {
+                             winnerResults, stepNumber) {
     let columns = [];
     for (let columnIndex = 0; columnIndex < numberOfColumns; columnIndex += 1) {
       let absoluteIndex = (rowNumber * numberOfColumns) + columnIndex;
       let square = makeSquare(absoluteIndex,
                               squares[absoluteIndex],
                               () => onClick(absoluteIndex),
-                              winnerResults);
+                              winnerResults,
+                              stepNumber);
       columns.push(square);
     }
     return columns;
@@ -64,6 +68,7 @@ function BoardRow(props) {
         value={ value }
         onClick={ () => onClick(absoluteIndex) }
         winnerResults={ winnerResults }
+        stepNumber={ stepNumber }
       />
     );
   }
@@ -73,9 +78,16 @@ function Square(props) {
   const winnerResults = props.winnerResults;
   const winningPositions = winnerResults ? winnerResults.winningPositions : [];
   const index = props.index;
+  const stepNumber = props.stepNumber;
   const isWinningMove = winningPositions.indexOf(index) > -1;
-  const activeIfWinning = isWinningMove ? " winning-move" : "";
-  const className = "square" + activeIfWinning;
+  const activeIfWinning = isWinningMove ? "winning-move" : "";
+  const isADraw = !winnerResults && stepNumber === 9;
+  const drawIfDraw = isADraw ? "draw" : "";
+  const classesToAdd = ["square", activeIfWinning, drawIfDraw];
+  const classArray = classesToAdd.filter(function(className) {
+    return !!className;
+  });
+  const className = classArray.join(" ");
   return (
     <button className={ className } onClick={() => props.onClick()}>
       {props.value}

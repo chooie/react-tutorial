@@ -56,3 +56,7 @@ ol, ul {
 .winning-move {
   background: gold;
 }
+
+.draw {
+  background: red;
+}

@@ -48,7 +48,8 @@ export default class TicTacToeThreeByThree extends React.Component {
 
     let status =
         message.getStatusBasedOnWhetherThereIsAWinner(
-          winnerResults, logic.getNextPlayerSymbol(this.state.xIsNext)
+          winnerResults, logic.getNextPlayerSymbol(this.state.xIsNext),
+          stepNumber
         );
 
     const moves = getMoveHistoryElements(stepNumber,
@@ -62,6 +63,7 @@ export default class TicTacToeThreeByThree extends React.Component {
           onClick={ (currentSquareIndex) =>
                     this.handleClick(currentSquareIndex) }
           winnerResults={ winnerResults }
+          stepNumber={ stepNumber }
         />
         <GameInfo
           status={ status }

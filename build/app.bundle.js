@@ -9557,7 +9557,7 @@ var TicTacToeThreeByThree = function (_React$Component) {
       var currentBoard = history[stepNumber];
       var winnerResults = logic.calculateWinner(currentBoard.squares);
 
-      var status = message.getStatusBasedOnWhetherThereIsAWinner(winnerResults, logic.getNextPlayerSymbol(this.state.xIsNext));
+      var status = message.getStatusBasedOnWhetherThereIsAWinner(winnerResults, logic.getNextPlayerSymbol(this.state.xIsNext), stepNumber);
 
       var moves = getMoveHistoryElements(stepNumber, history, this.jumpTo.bind(this));
 
@@ -9569,7 +9569,8 @@ var TicTacToeThreeByThree = function (_React$Component) {
           onClick: function onClick(currentSquareIndex) {
             return _this2.handleClick(currentSquareIndex);
           },
-          winnerResults: winnerResults
+          winnerResults: winnerResults,
+          stepNumber: stepNumber
         }),
         _react2.default.createElement(_GameInfo2.default, {
           status: status,
@@ -21951,6 +21952,7 @@ var Board = function (_React$Component) {
       var squares = this.props.squares;
       var onClick = this.props.onClick;
       var winnerResults = this.props.winnerResults;
+      var stepNumber = this.props.stepNumber;
       var rows = [];
       for (var rowIndex = 0; rowIndex < numberOfRows; rowIndex += 1) {
         rows.push(_react2.default.createElement(BoardRow, {
@@ -21959,7 +21961,8 @@ var Board = function (_React$Component) {
           numberOfColumns: numberOfColumns,
           squares: squares,
           onClick: onClick,
-          winnerResults: winnerResults
+          winnerResults: winnerResults,
+          stepNumber: stepNumber
         }));
       }
       return _react2.default.createElement(
@@ -21982,21 +21985,22 @@ function BoardRow(props) {
   var squares = props.squares;
   var onClick = props.onClick;
   var winnerResults = props.winnerResults;
-  var columns = makeColumnsForRow(rowNumber, numberOfColumns, squares, onClick, winnerResults);
+  var stepNumber = props.stepNumber;
+  var columns = makeColumnsForRow(rowNumber, numberOfColumns, squares, onClick, winnerResults, stepNumber);
   return _react2.default.createElement(
     "div",
     { key: rowNumber, className: "board-row" },
     columns
   );
 
-  function makeColumnsForRow(rowNumber, numberOfColumns, squares, onClick, winnerResults) {
+  function makeColumnsForRow(rowNumber, numberOfColumns, squares, onClick, winnerResults, stepNumber) {
     var columns = [];
 
     var _loop = function _loop(columnIndex) {
       var absoluteIndex = rowNumber * numberOfColumns + columnIndex;
       var square = makeSquare(absoluteIndex, squares[absoluteIndex], function () {
         return onClick(absoluteIndex);
-      }, winnerResults);
+      }, winnerResults, stepNumber);
       columns.push(square);
     };
 
@@ -22014,7 +22018,8 @@ function BoardRow(props) {
       onClick: function onClick() {
         return _onClick(absoluteIndex);
       },
-      winnerResults: winnerResults
+      winnerResults: winnerResults,
+      stepNumber: stepNumber
     });
   }
 }
@@ -22023,9 +22028,16 @@ function Square(props) {
   var winnerResults = props.winnerResults;
   var winningPositions = winnerResults ? winnerResults.winningPositions : [];
   var index = props.index;
+  var stepNumber = props.stepNumber;
   var isWinningMove = winningPositions.indexOf(index) > -1;
-  var activeIfWinning = isWinningMove ? " winning-move" : "";
-  var className = "square" + activeIfWinning;
+  var activeIfWinning = isWinningMove ? "winning-move" : "";
+  var isADraw = !winnerResults && stepNumber === 9;
+  var drawIfDraw = isADraw ? "draw" : "";
+  var classesToAdd = ["square", activeIfWinning, drawIfDraw];
+  var classArray = classesToAdd.filter(function (className) {
+    return !!className;
+  });
+  var className = classArray.join(" ");
   return _react2.default.createElement(
     "button",
     { className: className, onClick: function onClick() {
@@ -22133,11 +22145,13 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.getStatusBasedOnWhetherThereIsAWinner = getStatusBasedOnWhetherThereIsAWinner;
-function getStatusBasedOnWhetherThereIsAWinner(winnerResults, nextPlayer) {
+function getStatusBasedOnWhetherThereIsAWinner(winnerResults, nextPlayer, stepNumber) {
   var status;
 
   if (winnerResults) {
     status = "Winner: " + winnerResults.winner;
+  } else if (stepNumber === 9) {
+    status = "It's a draw!";
   } else {
     status = "Next player: " + nextPlayer;
   }
