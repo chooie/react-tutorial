@@ -31,23 +31,34 @@ function BoardRow(props) {
   const numberOfColumns = props.numberOfColumns;
   const squares = props.squares;
   const onClick = props.onClick;
-  let columns = [];
-  for (let columnIndex = 0; columnIndex < numberOfColumns; columnIndex += 1) {
-    let absoluteIndex = (rowNumber * numberOfColumns) + columnIndex;
-    let square = (
-      <Square
-        key={ absoluteIndex }
-        value={ squares[absoluteIndex] }
-        onClick={ () => onClick(absoluteIndex) }
-      />
-    );
-    columns.push(square);
-  }
+  let columns = makeColumnsForRow(rowNumber, numberOfColumns, squares, onClick);
   return (
     <div key={rowNumber} className="board-row">
       { columns }
     </div>
   );
+
+  function makeColumnsForRow(rowNumber, numberOfColumns, squares, onClick) {
+    let columns = [];
+    for (let columnIndex = 0; columnIndex < numberOfColumns; columnIndex += 1) {
+      let absoluteIndex = (rowNumber * numberOfColumns) + columnIndex;
+      let square = makeSquare(absoluteIndex,
+                              squares[absoluteIndex],
+                              () => onClick(absoluteIndex));
+      columns.push(square);
+    }
+    return columns;
+  }
+
+  function makeSquare(absoluteIndex, value, onClick) {
+    return (
+      <Square
+        key={ absoluteIndex }
+        value={ value }
+        onClick={ () => onClick(absoluteIndex) }
+      />
+    );
+  }
 }
 
 function Square(props) {

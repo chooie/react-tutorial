@@ -21945,11 +21945,11 @@ var Board = function (_React$Component) {
   _createClass(Board, [{
     key: "render",
     value: function render() {
-      var rows = [];
       var numberOfRows = 3;
       var numberOfColumns = 3;
       var squares = this.props.squares;
       var onClick = this.props.onClick;
+      var rows = [];
       for (var rowIndex = 0; rowIndex < numberOfRows; rowIndex += 1) {
         rows.push(_react2.default.createElement(BoardRow, {
           key: rowIndex,
@@ -21977,29 +21977,40 @@ function BoardRow(props) {
   var rowNumber = props.rowNumber;
   var numberOfColumns = props.numberOfColumns;
   var squares = props.squares;
-  var _onClick = props.onClick;
-  var columns = [];
-
-  var _loop = function _loop(columnIndex) {
-    var absoluteIndex = rowNumber * numberOfColumns + columnIndex;
-    var square = _react2.default.createElement(Square, {
-      key: absoluteIndex,
-      value: squares[absoluteIndex],
-      onClick: function onClick() {
-        return _onClick(absoluteIndex);
-      }
-    });
-    columns.push(square);
-  };
-
-  for (var columnIndex = 0; columnIndex < numberOfColumns; columnIndex += 1) {
-    _loop(columnIndex);
-  }
+  var onClick = props.onClick;
+  var columns = makeColumnsForRow(rowNumber, numberOfColumns, squares, onClick);
   return _react2.default.createElement(
     "div",
     { key: rowNumber, className: "board-row" },
     columns
   );
+
+  function makeColumnsForRow(rowNumber, numberOfColumns, squares, onClick) {
+    var columns = [];
+
+    var _loop = function _loop(columnIndex) {
+      var absoluteIndex = rowNumber * numberOfColumns + columnIndex;
+      var square = makeSquare(absoluteIndex, squares[absoluteIndex], function () {
+        return onClick(absoluteIndex);
+      });
+      columns.push(square);
+    };
+
+    for (var columnIndex = 0; columnIndex < numberOfColumns; columnIndex += 1) {
+      _loop(columnIndex);
+    }
+    return columns;
+  }
+
+  function makeSquare(absoluteIndex, value, _onClick) {
+    return _react2.default.createElement(Square, {
+      key: absoluteIndex,
+      value: value,
+      onClick: function onClick() {
+        return _onClick(absoluteIndex);
+      }
+    });
+  }
 }
 
 function Square(props) {
