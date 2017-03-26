@@ -52,3 +52,7 @@ ol, ul {
 .active {
   font-weight: bold;
 }
+
+.winning-move {
+  background: gold;
+}

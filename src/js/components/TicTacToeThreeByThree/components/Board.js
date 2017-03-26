@@ -6,6 +6,7 @@ export default class Board extends React.Component {
     const numberOfColumns = 3;
     const squares = this.props.squares;
     const onClick = this.props.onClick;
+    const winnerResults = this.props.winnerResults;
     let rows = [];
     for (var rowIndex = 0; rowIndex < numberOfRows; rowIndex += 1) {
       rows.push(
@@ -15,6 +16,7 @@ export default class Board extends React.Component {
           numberOfColumns={ numberOfColumns }
           squares={ squares }
           onClick={ onClick }
+          winnerResults={ winnerResults }
         />
       );
     }
@@ -31,39 +33,51 @@ function BoardRow(props) {
   const numberOfColumns = props.numberOfColumns;
   const squares = props.squares;
   const onClick = props.onClick;
-  let columns = makeColumnsForRow(rowNumber, numberOfColumns, squares, onClick);
+  const winnerResults = props.winnerResults;
+  let columns = makeColumnsForRow(rowNumber, numberOfColumns, squares, onClick,
+                                  winnerResults);
   return (
     <div key={rowNumber} className="board-row">
       { columns }
     </div>
   );
 
-  function makeColumnsForRow(rowNumber, numberOfColumns, squares, onClick) {
+  function makeColumnsForRow(rowNumber, numberOfColumns, squares, onClick,
+                             winnerResults) {
     let columns = [];
     for (let columnIndex = 0; columnIndex < numberOfColumns; columnIndex += 1) {
       let absoluteIndex = (rowNumber * numberOfColumns) + columnIndex;
       let square = makeSquare(absoluteIndex,
                               squares[absoluteIndex],
-                              () => onClick(absoluteIndex));
+                              () => onClick(absoluteIndex),
+                              winnerResults);
       columns.push(square);
     }
     return columns;
   }
 
-  function makeSquare(absoluteIndex, value, onClick) {
+  function makeSquare(absoluteIndex, value, onClick, winnerResults) {
     return (
       <Square
         key={ absoluteIndex }
+        index={ absoluteIndex }
         value={ value }
         onClick={ () => onClick(absoluteIndex) }
+        winnerResults={ winnerResults }
       />
     );
   }
 }
 
 function Square(props) {
+  const winnerResults = props.winnerResults;
+  const winningPositions = winnerResults ? winnerResults.winningPositions : [];
+  const index = props.index;
+  const isWinningMove = winningPositions.indexOf(index) > -1;
+  const activeIfWinning = isWinningMove ? " winning-move" : "";
+  const className = "square" + activeIfWinning;
   return (
-    <button className="square" onClick={() => props.onClick()}>
+    <button className={ className } onClick={() => props.onClick()}>
       {props.value}
     </button>
   );

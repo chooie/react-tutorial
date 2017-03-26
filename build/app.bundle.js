@@ -9568,7 +9568,8 @@ var TicTacToeThreeByThree = function (_React$Component) {
           squares: currentBoard.squares,
           onClick: function onClick(currentSquareIndex) {
             return _this2.handleClick(currentSquareIndex);
-          }
+          },
+          winnerResults: winnerResults
         }),
         _react2.default.createElement(_GameInfo2.default, {
           status: status,
@@ -21949,6 +21950,7 @@ var Board = function (_React$Component) {
       var numberOfColumns = 3;
       var squares = this.props.squares;
       var onClick = this.props.onClick;
+      var winnerResults = this.props.winnerResults;
       var rows = [];
       for (var rowIndex = 0; rowIndex < numberOfRows; rowIndex += 1) {
         rows.push(_react2.default.createElement(BoardRow, {
@@ -21956,7 +21958,8 @@ var Board = function (_React$Component) {
           rowNumber: rowIndex,
           numberOfColumns: numberOfColumns,
           squares: squares,
-          onClick: onClick
+          onClick: onClick,
+          winnerResults: winnerResults
         }));
       }
       return _react2.default.createElement(
@@ -21978,21 +21981,22 @@ function BoardRow(props) {
   var numberOfColumns = props.numberOfColumns;
   var squares = props.squares;
   var onClick = props.onClick;
-  var columns = makeColumnsForRow(rowNumber, numberOfColumns, squares, onClick);
+  var winnerResults = props.winnerResults;
+  var columns = makeColumnsForRow(rowNumber, numberOfColumns, squares, onClick, winnerResults);
   return _react2.default.createElement(
     "div",
     { key: rowNumber, className: "board-row" },
     columns
   );
 
-  function makeColumnsForRow(rowNumber, numberOfColumns, squares, onClick) {
+  function makeColumnsForRow(rowNumber, numberOfColumns, squares, onClick, winnerResults) {
     var columns = [];
 
     var _loop = function _loop(columnIndex) {
       var absoluteIndex = rowNumber * numberOfColumns + columnIndex;
       var square = makeSquare(absoluteIndex, squares[absoluteIndex], function () {
         return onClick(absoluteIndex);
-      });
+      }, winnerResults);
       columns.push(square);
     };
 
@@ -22002,21 +22006,29 @@ function BoardRow(props) {
     return columns;
   }
 
-  function makeSquare(absoluteIndex, value, _onClick) {
+  function makeSquare(absoluteIndex, value, _onClick, winnerResults) {
     return _react2.default.createElement(Square, {
       key: absoluteIndex,
+      index: absoluteIndex,
       value: value,
       onClick: function onClick() {
         return _onClick(absoluteIndex);
-      }
+      },
+      winnerResults: winnerResults
     });
   }
 }
 
 function Square(props) {
+  var winnerResults = props.winnerResults;
+  var winningPositions = winnerResults ? winnerResults.winningPositions : [];
+  var index = props.index;
+  var isWinningMove = winningPositions.indexOf(index) > -1;
+  var activeIfWinning = isWinningMove ? " winning-move" : "";
+  var className = "square" + activeIfWinning;
   return _react2.default.createElement(
     "button",
-    { className: "square", onClick: function onClick() {
+    { className: className, onClick: function onClick() {
         return props.onClick();
       } },
     props.value

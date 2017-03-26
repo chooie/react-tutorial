@@ -58,10 +58,11 @@ export default class TicTacToeThreeByThree extends React.Component {
     return (
       <div className="game">
         <Board
-            squares={ currentBoard.squares }
-            onClick={ (currentSquareIndex) =>
-                      this.handleClick(currentSquareIndex) }
-          />
+          squares={ currentBoard.squares }
+          onClick={ (currentSquareIndex) =>
+                    this.handleClick(currentSquareIndex) }
+          winnerResults={ winnerResults }
+        />
         <GameInfo
           status={ status }
           moves={ moves }
